@@ -1,5 +1,6 @@
 def OIB_ngram_tagging(tokens_list, ngram_dict, max_n_gram_size, tags=None):
 	# tags can have initial values blocking repeated finds
+	# ngram_dict can also be a set. 
 
 	if tokens_list == None: 
 		return None, None
@@ -10,7 +11,7 @@ def OIB_ngram_tagging(tokens_list, ngram_dict, max_n_gram_size, tags=None):
 	if tags == None or len(tags) != nb_tokens:
 		tags = ["O"] * nb_tokens
 
-	found_objects = []
+	found_objects_keys = []
 	found_objects_position = []
 
 	# Make the search for bigger n_gram sizes first
@@ -21,10 +22,10 @@ def OIB_ngram_tagging(tokens_list, ngram_dict, max_n_gram_size, tags=None):
 				searchable_tuple = get_searchable_tuple(tokens_list, current_position, current_size)
 				if searchable_tuple in ngram_dict:
 					OIB_tag(tags, current_position, current_size)
-					found_objects.append(ngram_dict[searchable_tuple])
+					found_objects_keys.append(searchable_tuple)
 					found_objects_position.append(current_position)	
 
-	return tags, found_objects, found_objects_position
+	return tags, found_objects_keys, found_objects_position
 
 def OIB_tag(tags, position, size):
 	tags[position] = "B"
