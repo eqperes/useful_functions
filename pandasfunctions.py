@@ -35,7 +35,8 @@ def expand_values(df, source_column, default_column, null_value="", new_column=T
             			new_row = row
             			new_row[new_column_name] = value
             			new_df = new_df.append(new_row)
-        
+            			
+        new_df.index = range(0, new_df.shape[0])
         return new_df
             	
 	
