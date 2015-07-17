@@ -7,3 +7,4 @@ def class_color(classes):
   
 def plot_data(X, y):
   plt.scatter(X[:,0], X[:,1], c=class_color(y))
+  plt.show()
