@@ -20,3 +20,21 @@ def apply_function(collection, function, filter_dict={}, batch=100000):
         new_entries_batch.append(function(entry))
     requests = [ReplaceOne({"_id": new_entry["_id"]}, new_entry) for new_entry in new_entries_batch]
     collection.bulk_write(requests, ordered=False)
+ 
+    
+class KeyFunctions(object):
+    """
+    Stores functions to be used for given key values of a MongoDb collection entry
+    """
+    def __init__(self, key_function_tuples=[]):
+        self.key_function_tuples = key_function_tuples
+
+    def add(self, key, function):
+        self.key_function_tuples.append((key, function))
+
+    def apply(self, entry):
+        new_entry = entry.copy()
+        for key, function in self.key_function_tuples:
+            new_entry[key] = function(entry[key])
+        return new_entry
+
