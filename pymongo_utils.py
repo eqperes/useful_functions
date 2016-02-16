@@ -1,4 +1,5 @@
 from pymongo import ReplaceOne
+from tqdm import tqdm
 
 
 def apply_function(collection, function, filter_dict={}, batch=100000):
@@ -37,4 +38,20 @@ class KeyFunctions(object):
         for key, function in self.key_function_tuples:
             new_entry[key] = function(entry[key])
         return new_entry
+        
+
+def obtain_collection_keys(collection, filter={}):
+    """
+    Function used to obtain all the keys of entries in a MongoDb collection
+
+    :param collection: a mongodb collection
+    :param filter: a filter for mongodb find function
+    :return: a dictionary containing all the keys of all the entries obtained by the find function,
+        with the number of ocurrences of the key in the value
+    """
+    keys = {}
+    for entry in collection.find(filter):
+        for key in entry:
+            keys[key] = keys.setdefault(key, 0) + 1
+    return keys
 
